@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "29643895790",
+    "project_id": "fint-shoppe",
+    "storage_bucket": "fint-shoppe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29643895790:android:db1acbe14869694f7854ff",
+        "android_client_info": {
+          "package_name": "com.example.fint_shoppe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29643895790-6sqkj75kdltpbk39gapelh0dc7nec1m0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVdB-o3X13DudpI2wIYe2Hr0kLBhv2CDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29643895790-6sqkj75kdltpbk39gapelh0dc7nec1m0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
