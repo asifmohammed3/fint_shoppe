@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fint_shoppe/functions/dart/add_product.dart';
-import 'package:fint_shoppe/product_tile.dart';
+import 'package:fint_shoppe/seller_product_tile.dart';
 import 'package:fint_shoppe/screens/signin_screen.dart';
 import 'package:fint_shoppe/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import '../customer_product_tile.dart';
 
 class SellerHomeScreen extends StatefulWidget {
   const SellerHomeScreen({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
   TextEditingController productnamecontroller = TextEditingController();
   TextEditingController pricecontroller = TextEditingController();
   String category = 'Electronics';
+  var db = FirebaseFirestore.instance;
 
   // List of items in our dropdown menu
   var items = [
@@ -30,93 +35,100 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text("Seller Console"),
-              centerTitle: true,
-              leading: Icon(Icons.menu),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.logout),
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignInScreen()),
-                    );
-                  },
-                ),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                          scrollable: true,
-                          title: const Text("Add a product"),
-                          actions: [
-                            CustTextField(
-                                controller: brandcontroller,
-                                labelText: "Enter Brand name here"),
-                            StatefulBuilder(
-                              builder: ((context, setState) {
-                                return DropdownButton(
-                                  value: category,
-                                  icon: const Icon(Icons.keyboard_arrow_down),
-                                  items: items.map((String items) {
-                                    return DropdownMenuItem(
-                                      value: items,
-                                      child: Text(items),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      category = newValue!;
-                                    });
-                                  },
-                                );
-                              }),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: CustTextField(
-                                  controller: productnamecontroller,
-                                  labelText: "Enter name of product "),
-                            ),
-                            CustTextField(
-                                controller: pricecontroller,
-                                labelText: "Enter Price of product ",
-                                keyboardType: TextInputType.number),
-                            ElevatedButton(
-                                onPressed: () {
-                                  if (brandcontroller.text.isNotEmpty &&
-                                      productnamecontroller.text.isNotEmpty &&
-                                      pricecontroller.text.isNotEmpty) {
-                                    setState(() {
-                                      addProduct(
-                                          brandcontroller.text,
-                                          category,
-                                          productnamecontroller.text,
-                                          pricecontroller.text);
-                                      brandcontroller.clear();
-                                      productnamecontroller.clear();
-                                      pricecontroller.clear();
-                                    });
-                                  }
-
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("Add product"))
-                          ],
-                        ));
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Seller Console"),
+          centerTitle: true,
+          leading: Icon(Icons.menu),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SignInScreen()),
+                );
               },
-              child: const Icon(
-                Icons.add,
-                size: 30,
-              ),
             ),
-            body: ProductTile()));
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (ctx) =>
+                    AlertDialog(
+                      scrollable: true,
+                      title: const Text("Add a product"),
+                      actions: [
+                        CustTextField(
+                            controller: brandcontroller,
+                            labelText: "Enter Brand name here"),
+                        StatefulBuilder(
+                          builder: ((context, setState) {
+                            return DropdownButton(
+                              value: category,
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: items.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  category = newValue!;
+                                });
+                              },
+                            );
+                          }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(7.0),
+                          child: CustTextField(
+                              controller: productnamecontroller,
+                              labelText: "Enter name of product "),
+                        ),
+                        CustTextField(
+                            controller: pricecontroller,
+                            labelText: "Enter Price of product ",
+                            keyboardType: TextInputType.number),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (brandcontroller.text.isNotEmpty &&
+                                  productnamecontroller.text.isNotEmpty &&
+                                  pricecontroller.text.isNotEmpty) {
+                                setState(() {
+                                  AddProduct add = new AddProduct();
+                                  add.addProductSeller(
+                                      brandcontroller.text,
+                                      category,
+                                      productnamecontroller.text,
+                                      pricecontroller.text);
+                                  add.addProductCustomer(
+                                      brandcontroller.text,
+                                      category,
+                                      productnamecontroller.text,
+                                      pricecontroller.text);
+                                  brandcontroller.clear();
+                                  productnamecontroller.clear();
+                                  pricecontroller.clear();
+                                });
+                              }
+
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("Add product"))
+                      ],
+                    ));
+          },
+          child: const Icon(
+            Icons.add,
+            size: 30,
+          ),
+        ),
+        body: SellerProductTile(),),);
   }
 }

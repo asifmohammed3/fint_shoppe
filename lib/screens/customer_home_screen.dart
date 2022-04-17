@@ -1,7 +1,9 @@
-import 'package:fint_shoppe/product_tile.dart';
+import 'package:fint_shoppe/seller_product_tile.dart';
 import 'package:fint_shoppe/screens/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../customer_product_tile.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({Key? key}) : super(key: key);
@@ -34,7 +36,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           ),
         ],
       ),
-      body: ProductTile(),
+      body:CustomerProductTile()
     ));
   }
 }

@@ -140,13 +140,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       Text(
                         'Login',
                         style: TextStyle(color: Colors.white, fontSize: 19),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Icon(
                           Icons.arrow_forward_outlined,
                           color: Colors.white,

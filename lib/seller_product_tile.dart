@@ -1,23 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class ProductTile extends StatefulWidget {
+
+class SellerProductTile extends StatefulWidget {
   @override
-  _ProductTileState createState() => _ProductTileState();
+  _SellerProductTileState createState() => _SellerProductTileState();
 }
 
-class _ProductTileState extends State<ProductTile> {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('products').snapshots();
+class _SellerProductTileState extends State<SellerProductTile> {
+
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('seller').doc(FirebaseAuth.instance.currentUser?.email).collection('products').snapshots();
+final db=FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
+
       stream: _usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -33,9 +37,10 @@ class _ProductTileState extends State<ProductTile> {
         }
 
         return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          children: snapshot.data!.docs.map((document) {
             Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
+                document.data() as Map<String, dynamic> ;
+
             return Padding(
               padding: const EdgeInsets.all(4.0),
               child: Container(
@@ -44,8 +49,8 @@ class _ProductTileState extends State<ProductTile> {
                     color: Colors.white),
                 child: ListTile(
                   style: ListTileStyle.list,
-                  title: Text(data['productname']),
-                  subtitle: Text(data['brand']),
+                  title: Text(data["productname"]),
+                  subtitle: Text(data["brand"]),
                   trailing: Text(
                     "₹ ${data['price']}",
                     style: TextStyle(fontSize: 16),
